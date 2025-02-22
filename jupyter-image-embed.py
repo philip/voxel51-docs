@@ -1,7 +1,9 @@
+import os
 from pathlib import Path
 import base64
 import nbformat
 
+JUPYTER_DIRS = ["./docs/tutorials", "./docs/how_do_i/recipes"]
 
 def get_webp_base64(file_path: str | Path) -> str:
     """
@@ -64,7 +66,11 @@ def update_notebook_images(notebook_path: str, output_path: str) -> None:
 
 # Example usage
 if __name__ == "__main__":
-    update_notebook_images(
-        notebook_path='/home/spousty/git/voxel51-docs/docs/tutorials/anomaly_detection.ipynb',
-        output_path='1notebook.ipynb'
-    )
+    for dir in JUPYTER_DIRS:
+        directory = Path(dir)
+        notebook_files = list(directory.glob('*.ipynb'))
+        for notebook_file in notebook_files:
+            update_notebook_images(
+                notebook_path=notebook_file,
+                output_path=notebook_file
+            )
