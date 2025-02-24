@@ -6,13 +6,21 @@ We love pull requests - everything from typos to full Jupyter Notebooks.
 At its most simple, you can fork the repo in GitHub, make and commit your edits, and then open a PR. 
 A step above would be setting up local development.
 
-To install and edit the doc:
+To install and edit the general docs doc:
 
 1. Make and activate a virtual environment
+   2. `python -m venv .venv`
+   3. On linux/mac/Windows WSL `source .venv\bin\activate`
+   4. On windows in Powershell ` source .venv\Scripts\activate`
 2. Be in the root directory of the repo
 3. `pip install -r requirements.txt`
-4. Run `mkdocs serve`
+4. Run `mkdocs serve --dirty`. The --dirty flag specifies that if you edit a single file, mkdocs serve will only rebuild that one file rather than the entire documentation site. To do a clean build and force mkdocs to build everything run `mkdocs server`. Clean is the default behavior.
 5.  PARTY!
+
+To buid the entire doc site (only been test on Linux)
+1. Follow steps 1-3 above
+2. `./build.sh --venv <location of the venv you created in step 1 above>`
+3. Celebration!
 
 To build the API docs along with the general docs you should use build.sh
 
