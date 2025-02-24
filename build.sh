@@ -267,6 +267,10 @@ main() {
         ln -s "$TS_API_DOC_DIR" docs/ts_api
     fi
 
+    # Embed all the images in the jupyter notebooks so we don't have to worry about
+    # path references
+    python jupyter-image-embed.py
+
     # Build final documentation
     log_info "Building documentation with mkdocs..."
     mkdocs build
