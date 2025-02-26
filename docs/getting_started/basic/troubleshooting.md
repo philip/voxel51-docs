@@ -213,3 +213,81 @@ Downloading and installing the Microsoft Visual C++ Redistributable from this
 [page](https://support.microsoft.com/en-us/topic/the-latest-supported-visual-c-downloads-2647da03-1eea-4433-9aff-95f26a218cc0)
 should resolve the issue. Specifically, you will want to download the
 `vc_redist.x64.exe` redistributable.
+
+## Windows No Content in App [¶](\#windows-no-content-in-app "Permalink to this headline")
+
+When using FiftyOne in a notebook or in a web browser in Windows, if launching
+the app results in a blank screen, it's possibly due to an issue with the MIME
+type settings. When using a browser, while at `localhost:5151` you can check
+the Console by opening Developer Tools <kbd>F12</kbd> or under "More Tools"
+menu. Once the Developer Tools pop out is open, click the <kbd>Console</kbd>
+tab. If you see an error similar to:
+
+??? info "No Content in Jupyter Notebook"
+
+    If using a Jupyter Notebook, you should check using a web browser using the
+    same process above to see if the same error is shown.
+
+```
+Failed to load module script: Expected a JavaScript module script but the
+server responded with a MIME type of "text/plain". Strict MIME type checking
+is enforced for module scripts per HTML spec.
+
+```
+
+This is likely due to a registry misconfiguration. This can be remedied by
+modifying a few keys in the Windows Registry.
+
+!!! danger
+
+    Modifying the Windows Registry can have **serious** consequences if done
+    incorrectly. Make sure to back up the registry before making any changes as
+    incorrect changes to the registry can cause system instability or even
+    render your system inoperable. Proceed with caution and only modify the
+    registry if you are confident in what you are doing.
+
+### Modifying Windows Registry [¶](\#modifying-windows-registry "Permalink to this headline")
+
+1. Open the Windows menu and type `regedit` and open the Registry Editor
+(requires Admin permissions).
+
+2. In the Registry Editor window, use the location bar to navigate to:
+
+    ```{ .registry .annotate }
+    HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.js  # (1)!
+    ```
+
+    1. You may need to prepend `COMPUTER\` navigate to
+    `COMPUTER\HKEY_LOCAL_MACHINE\SOFTWARE\Classes\.js`
+
+3. Look for the Value Name `Content Type`, this is probably set to `text/plain`
+if the app is not rendering content. Change the `Content Type` Value data to
+`text/javascript` by double clicking to modify the data.
+
+4. Next, use the location bar to navigate to:
+
+    ```{ .registry .annotate }
+    HKEY_CLASSES_ROOT\.js  # (1)!
+    ```
+
+    1. You may need to prepend `COMPUTER\` navigate to
+    `COMPUTER\HKEY_CLASSES_ROOT\.js`
+
+5. Again, look for the Value Name `Content Type` and update the Value data to
+`text/javascript`.
+
+6. Close the Registry Editor, and reboot your computer.
+
+7. After rebooting, try launching the app again and open a browser. If this
+was the issue, you should now see the FiftyOne application in your browser.
+
+### References [¶](\#references "Permalink to this headline")
+
+Resources used to resolve this issue.
+
+- [Golang GitHub issue](https://github.com/golang/go/issues/32350#issuecomment-635859542)
+(recommend reviewing entire thread).
+
+- [Python Bugs](https://bugs.python.org/issue43975)
+
+- [Mozilla MIME Types](https://developer.mozilla.org/en-US/docs/Web/HTTP/MIME_types#textjavascript)
