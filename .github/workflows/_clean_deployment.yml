@@ -1,5 +1,5 @@
 ---
-name: Clean Docs Deployment
+name: Composite Clean Docs Deployment
 
 on:
   workflow_call:
@@ -14,7 +14,7 @@ on:
         required: true
       GOOGLE_WORKLOAD_IDP_SECRET_NAME:
         required: true
-      GCP_DOCS_LOCATION:
+      GCP_PREVIEW_DOCS_LOCATION:
         required: true
 
 jobs:
@@ -40,4 +40,4 @@ jobs:
 
       - name: Clean up deployment
         run: |
-          gsutil rm -r gs://${{ secrets.GCP_DOCS_LOCATION }}/${{ inputs.path }}
+          gsutil rm -r gs://${{ secrets.GCP_PREVIEW_DOCS_LOCATION }}/${{ inputs.path }}
